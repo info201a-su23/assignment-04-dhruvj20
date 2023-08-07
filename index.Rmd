@@ -1,71 +1,148 @@
 ---
-title: "A3: Incarceration"
-output: html_document
+title: 'A4: Incarceration'
+output:
+  pdf_document: default
+  html_document: default
 ---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+source("chart1_example.R")
+source("chart2_example.R")
+source("map_example.R")
+source("summary.R")
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ### Introduction
 
-An introduction of the problem domain and a description of the variable(s) you are choosing to analyze (and why!)
+**Race** plays a significant factor in ***all types of human interactions***, ranging from the perception of a person walking on the same street to the judgement cast on a person accused of wrongdoing.
+
+In the context of the latter, race, **especially in America**, has been ***weaponized against people of color*** in ways *not applicable to people of races in power* (**white people** for the most part).
+
+This results in **racist, unequal treatment** of individuals of color accused of wrongdoing, and this effect is most noticeable when examining the *POC populations in prisons and jails over time*, according to the [Canvas page for the assignment](https://canvas.uw.edu/courses/1643812/assignments/8415024).
+
+The dataset I'm using for this analysis, per the [Canvas page for the assignment](https://canvas.uw.edu/courses/1643812/assignments/8415024), are a subset of a much larger jail & prison population dataset collected by the Vera institute (more on this later).
+
+Per the [Canvas page for the assignment](https://canvas.uw.edu/courses/1643812/assignments/8415024), the dataset I'm using to create this report is **sorted jail & prison population datasets from counties in each state** (observational unit is a *proportion out of 100,000 people*) condensed to *1990 and beyond*.
+
+The primary focus of my report is to **highlight the racial disparities** between treatments of *people of color from various races* and those of *white people* between **2010 and 2018**.
+
+The scope of my report covers this prison incarceration timeline because it is *quite recent*.
+
+I think that provides valuable insights on the discrimination of POCs via the prison system *for the most recent decade*, and allows us to **project data** showing this discrimination *across various races* to the next decade.
+
+The responding variable in my analysis will always be the **number of people out of every 100,000**. The reason I'm only using the proportion because it *sets a population statistics to a universal scale*, so differences in population across states and years don't become confounding variables and we can thus form clearer conclusions from our analysis.
+
+The variables I've chosen to focus my report on are:
+
+-   **State**: Grouping the 2010s prison population analysis by state allows us to statistically determine *which US regions incarcerate more people of color*, and we can look for *incarceration patterns across states/regions of the US* (was going to do this in the maps section)
+
+-   **Year**: Using this variable **provides chronology** to potential trends, patterns, and changes in racist incarceration over 2010-2018, revealing important insights on the *occurrences of these patterns in tandem*.
+
+-   **Urbanicity**: This is probably the **most important** variable because its **categorization** of different counties *into levels* allows us to determine if the *racist incarceration* of POCs **changes** with an increase in the *levels of urbanicity*.
 
 ### Summary Information
 
-Write a summary paragraph of findings that includes the 5 values calculated from your summary information R script
+**Values 1 & 2**: Determining urbanicity proportions using the top 20 and top 50 prison population (incarceration) rates of black people
 
-These will likely be calculated using your DPLYR skills, answering questions such as: 
+Out of the **top 20 black prison population rates** in counties across the US from 2010 to 2018, `r rural_in_20()` counties were categorized under the urbanicity level of **rural**, whereas the *other* `r smallmid_in_50()` were categorized as **small/mid**.
 
-- What is the average value of my variable across all the counties (in the current year)?
-- Where is my variable the highest / lowest?
-- How much has my variable change over the last N years?
+If we expand the list to the **top 50**, `r rural_in_50()` counties were categorized as **rural**, `r smallmid_in_50()` as **small/mid**, and the other `r suburban_in_50()` as **suburban**.
 
-Feel free to calculate and report values that you find relevant. Again, remember that the purpose is to think about how these measure of incarceration vary by race.
+This is an important finding because this tells us that in the past decade, two of the lower urbanicity categorizations (**rural** and **small/mid**) were responsible for some of the highest rates of incarceration of black people through the 2010s.
+
+**Values 3-12**: Determining the minimum (1st number in fivenum summary), median (3rd number), maximum (5th number) and IQR of differentials between latinx and white jail population rates for each year
+
+Each value is 1 five-number summary for a year's differentials between individual incarcerations of latinx people and white people.
+
+-   **Negative numbers imply that more white people got incarcerated than latinx people, whereas positive numbers imply the opposite; units are 1 person**
+
+Differential Five-Number Summaries (Minimum, Q1, Median, Q3, Maximum):
+
+```{r}
+quartile_differentials_table
+```
+
+Throughout the 2010s, the **maximum differential** between latinx and white jail population rates fluctuated between `r smallest_max()` *more latinx people incarcerated* to `r largest_max()` *more latinx people incarcerated*.
+
+These two values represent the maximum differential (**in 2010**) and maximum differential respectively (**in 2018**), illustrating that the *max difference between latinx people and white people* incarcerated in jail **has increased throughout the 2010s**.
+
+Another important thing to note for *every differential fivenum summary* is that the **highest 25% of data**, between the 3rd quartile and the maximum value, always has **ranges of over 100,000** more latinx people incarcerated in jail.
+
+This tells us that certain US counties over the past decade have incarcerated **significantly more** *latinx people* in jails over *white people*.
+
+The **lowest 25%** (Q1, 2nd number in summary values), the **median**, and the **lowest 75%** (Q3, 4th number in summary values) of differentials between *jail-incarcerated latinx people* and *jail-incarcerated white people* has decreased over the past decade.
+
+Even considering that, the **aforementioned increases in the maximum differential values** tell us that the *incarceration of latinx individuals in jails* across the US has only **gotten worse** and thus **more racist** over the past decade.
 
 ### The Dataset
 
-Who collected the data?  
-How was the data collected or generated?  
-Why was the data collected?  
-How many observations (rows) are in your data?  
-How many features (columns) are in the data?  
-What, if any, ethical questions or questions of power do you need to consider when working with this data?  
-What are possible limitations or problems with this data?   (at least 200 words)
+Sources:
 
+-   <https://github.com/vera-institute/incarceration-trends/blob/master/README.md>
+-   Methodology-for-Incarceration-Trends-Project.pdf
+
+As mentioned earlier, the **Vera Insitute** collected this data.
+
+The reason they did so at the county level was to **relinquish American society's authoritative control over the public's use and understanding of incarceration data**.
+
+This allows society to better understand the *foundations, reasons, effects, and theories* behind **racist incarceration** methods in the US.
+
+In the dataset I am using, there are **91,031 total observations**, with **23 features per observation**.
+
+This dataset was put together from various jail surveys (spanning 1985 and beyond) and census datasets (spanning 8 censuses from 1970-2013).
+
+The most important ethical assumption while working with this dataset is that ***each individual accounted for in this dataset is a person with a story***.
+
+*Casting assumptions on the race* of an incarcerated person **defeats the whole purpose of using this data**, because doing so *poisons the intentions away from the overall goal of the dataset*: analysis of the racism that increases the incarceration of POCs.
+
+Furthermore, making judgements **without understanding the context and situation** behind each individual's incarceration **dehumanizes the people of color** whose incarcerations have been documented in this dataset.
+
+The one limitation of this dataset is that there's no information regarding **which crimes specifically** are committed, **how many times they've been committed**, and **length of incarceration**.
+
+This would be very useful because having access to this data to wrangle/sort through would *add more context to the comparison analysis* between the incarceration of POCs and white individuals.
 
 ### Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+Sources: - <https://uw.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c470c37e-a4fd-40d7-8c78-b0530123d189> - <https://bookdown.org/yihui/rmarkdown/r-code.html>
 
-The first chart that you will create and include will show the trend over time of your variable/topic. Think carefully about what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Show more than one, but fewer than ~10 trends
-  - This may mean showing the same measure for different locations or different racial groups. Think carefully about a meaningful comparison of locations (e.g., the top 10 counties in a state, top 10 states, etc.)
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear legend title
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
-``````{r, echo = FALSE, code = readLines("chart1_example.R")}
+```{r}
+time_plot
 ```
+
+I included this chart because I thought it was the **most obvious** to illustrate how the median collective jail & prison incarceration rate changed for different races over the last decade. 
+
+The most significant pattern from this graph is that the median jail and prison incarceration throught these first 6 years of the past decade is by far the highest for black people, up to a scale of 4 times higher. 
+
+This shows that the racist institutions of incarceration in the past decade have imprisoned/jailed black people by far the most out of any race. 
+
+The jail/prison incarceration rates of Latinx, Native American, and white people are around 500-1000 people, with the jail/prison incarceration rates of AAPI (Asian American & Pacific Islanders) just above 0.
 
 ### Variable Comparison Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+```{r}
+black_incarceration_vs_white_incarceration
+```
 
-The second chart that you will create and include will show how two different (continuous) variables are related to one another. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
+From our previous plot, we know and understand that from 2010 onwards, black people have been incarcerated at a much higher rate. 
 
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- If you choose to add a color encoding (not required), you need a legend for your different color and a clear legend title
+I drew this plot to compare the incarceration rates from 2010 onwards of black people in prisons against the incarceration rates of white people.
+
+I think this comparison is extremely important because the black community in the US is a group that has been devastatingly discriminated against and incarcerated especially by white people, a group that has predominantly been in power since the existence of the United States. 
+
+Omitting a lot of the values told me that some counties in general just didn't report their race-categorized prison population statistics, which raises suspicion on potential serious biases towards the incarceration of POCs in comparison to white people. 
+
+This once again ties back to the Vera Institute's purpose of taking away control from people in positions of authority and power over the prison systems, so they can't get away with manipulate the statistics to hide their racist ideals. 
+
+Looking at the graph, an obvious pattern is that the scales of the white prison population and the black prison population are extremely different; the highest scale value for the black prison population is slightly above 12,000, compared to 2,000 for white people.
+
+Furthermore, the fact that there's even a little linearity in the plot while keeping mind the relationship between the scales shows the incarceration system's racist bias towards black individuals who are accused of wrongdoing, resulting in a much higher prison population rate (when reported) in comparison to white people. 
+
+The presence of outliers too illustrates that even with said linearity on the graph, some counties' incarceration systems are even more racist because they imprison black people at an even higher rate compared to the already-racist bias towards black people highlighted in a linear regression line of this plot.
 
 ### Map
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+I couldn't figure out how to do this in time for the deadline, but my overall idea was to continue on the theme of black people being incarcerated at a significantly higher rate than most other races. 
 
-The last chart that you will create and include will show how a variable is distributed geographically. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Your map needs a title
-- Your color scale needs a legend with a clear label
-- Use a map based coordinate system to set the aspect ratio of your map
-
+I was going to map the aggregate rate (combining the black jail population and black prison population) of black people incarcerated in each state during the year 2018 and spot any differences/patterns. 
